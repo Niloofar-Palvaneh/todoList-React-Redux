@@ -1,18 +1,21 @@
 import './App.css';
-import { connect } from 'react-redux';
 import TodoItem from './components/todoItem/TodoItem';
 import { addTodoAction } from './Redux/Todos';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-function App(props) {
-  const [newTodo , setNewTodo] = useState('')
-  const getNewTodoTotleHandler = (e)=>{
+export default function App() {
+  const [newTodo, setNewTodo] = useState('')
+  const dispatch = useDispatch()
+  const todos = useSelector(state => state)
+
+  const getNewTodoTotleHandler = (e) => {
     setNewTodo(e.target.value)
   }
 
-  const addTodoHandler = ()=>{
-    console.log(newTodo);
-    props.addTodo(newTodo)
+  const addTodoHandler = () => {
+    dispatch(addTodoAction(newTodo))
+    setNewTodo("")
   }
 
 
@@ -25,12 +28,12 @@ function App(props) {
           </h1>
           <div className='flex items-center gap-4'>
             <input
-            onChange={(e)=>getNewTodoTotleHandler(e)}
-            value={newTodo}
-            type="text" placeholder='write yor work...' className='border-none outline-none bg-white p-2 rounded-xl shadow' />
+              onChange={(e) => getNewTodoTotleHandler(e)}
+              value={newTodo}
+              type="text" placeholder='write yor work...' className='border-none outline-none bg-white p-2 rounded-xl shadow' />
             <div
-            onClick={addTodoHandler}
-            className='bg-white rounded-full w-max p-1'>
+              onClick={addTodoHandler}
+              className='bg-white rounded-full w-max p-1'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"
                 class="w-7 h-7 bg-yellow-400 text-white rounded-full">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -46,14 +49,9 @@ function App(props) {
           </div>
           <div className='flex flex-col'>
             {
-              props.todos ? (
-                props.todos.map(todo => (
-                  <TodoItem {...todo} />
-                ))
-              )
-                : (
-                  <h3>no todo found</h3>
-                )
+              todos.map(todo => (
+                <TodoItem {...todo} />
+              ))
             }
           </div>
         </div>
@@ -61,16 +59,3 @@ function App(props) {
     </>
   );
 }
-
-function mapStateToProps(store) {
-  return {
-    todos: store
-  }
-}
-
-const mapDispatchToProps = (dispatch)=>({
-  addTodo : (title)=> dispatch(addTodoAction(title))
-})
-
-
-export default connect(mapStateToProps , mapDispatchToProps)(App)
