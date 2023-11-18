@@ -1,17 +1,20 @@
-import { removeTodoAction } from "../../Redux/Todos"
+import { doTodoAction, removeTodoAction } from "../../Redux/Todos"
 import { useDispatch } from "react-redux"
 
 export default function TodoItem(todo) {
     const deispatch = useDispatch()
     const removeTodoHandler = (id) => deispatch(removeTodoAction(id))
+    const doTodoHandler = (id) => deispatch(doTodoAction(id))
     return (
         <>
-            <div className='bg-white flex items-center justify-between w-[400px] sm:w-full md:w-full rounded mt-4'>
+            <div className={`${todo.isCompleted ? "bg-blue-200 opacity-75 " : "bg-white "} flex items-center justify-between w-[400px] sm:w-full md:w-full rounded mt-4`}>
                 <p className='pl-2 text-gray-700'>
                     {todo.title}
                 </p>
                 <div className='flex gap-2'>
-                    <div className='cursor-pointer py-4 px-2 flex items-center justify-center transition hover:bg-green-100'>
+                    <div
+                        onClick={() => doTodoHandler(todo.id)}
+                        className='cursor-pointer py-4 px-2 flex items-center justify-center transition hover:bg-green-100'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-green-500">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>

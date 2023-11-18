@@ -12,9 +12,17 @@ export default function reduser(state = [], action) {
             const newStore = copyStore.filter(todo => todo.id !== action.payload.id)
             return newStore
         }
+
         case doTodo: {
-            return state
+            let newState = [...state]
+            newState.some(todo => {
+                if (todo.id === action.id) {
+                    todo.isCompleted = !todo.isCompleted
+                }
+            })
+            return newState
         }
+
         default: {
             return [...state]
         }
